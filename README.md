@@ -39,3 +39,10 @@ CREATE TABLE clientes (
 );
 ```
 
+## Backend
+### Para rodar o back, é preciso rodar um npm install e criar um arquivo .env e copiar o conteúdo do .env.example
+```
+npm i
+cat .env.example > .env
+npm start
+```
