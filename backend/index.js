@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 
-const { getClientes } =  require("./routes/ClienteRoutes");
+const { getClientes, createCliente, getDeliveryRoute } =  require("./routes/ClienteRoutes");
 
 app.use(bodyParser.json());
 app.use(
@@ -17,6 +17,8 @@ app.get("/", (request, response) => {
 });
 
 app.get("/clientes", getClientes);
+app.post("/clientes", createCliente)
+app.get('/clientes/rota', getDeliveryRoute)
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

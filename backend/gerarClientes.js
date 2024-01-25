@@ -7,7 +7,6 @@ const clientes = [
     telefone: "+552799717-2201",
     x: 38.54,
     y: 19.84,
-    id: "1",
   },
   {
     nome: "Angelo Ortiz",
@@ -15,7 +14,6 @@ const clientes = [
     telefone: "+552799717-2202",
     x: 77.41,
     y: 40.39,
-    id: "2",
   },
   {
     nome: "Hattie Kirlin",
@@ -23,7 +21,6 @@ const clientes = [
     telefone: "+552799717-2203",
     x: 74.3,
     y: 4.28,
-    id: "3",
   },
   {
     nome: "Dana Witting",
@@ -31,7 +28,6 @@ const clientes = [
     telefone: "+552799717-2204",
     x: 46.69,
     y: 6.4,
-    id: "4",
   },
   {
     nome: "Wendell Goyette PhD",
@@ -39,7 +35,6 @@ const clientes = [
     telefone: "+552799717-2205",
     x: 27.27,
     y: 5.74,
-    id: "5",
   },
   {
     nome: "Roderick King",
@@ -47,7 +42,6 @@ const clientes = [
     telefone: "+552799717-2206",
     x: 13.68,
     y: 36.41,
-    id: "6",
   },
   {
     nome: "Christie Miller",
@@ -55,7 +49,6 @@ const clientes = [
     telefone: "+552799717-2207",
     x: 92.25,
     y: 27.86,
-    id: "7",
   },
   {
     nome: "Morris Reichel",
@@ -63,7 +56,6 @@ const clientes = [
     telefone: "+552799717-2208",
     x: 6.91,
     y: 7.38,
-    id: "8",
   },
   {
     nome: "Marcus Gibson II",
@@ -71,7 +63,6 @@ const clientes = [
     telefone: "+552799717-2209",
     x: 1.05,
     y: 1.6,
-    id: "9",
   },
   {
     nome: "Terrence Wolf",
@@ -79,15 +70,14 @@ const clientes = [
     telefone: "+552799717-2210",
     x: 4.08,
     y: 2.26,
-    id: "10",
   }
 ];
 
-const columns = "id, nome, email, telefone, x, y";
+const columns = "nome, email, telefone, x, y";
 const values = clientes
   .map(
     (cliente) =>
-      `(${cliente.id}, '${cliente.nome}', '${cliente.email}', '${cliente.telefone}', ${cliente.x}, ${cliente.y})`
+      `('${cliente.nome}', '${cliente.email}', '${cliente.telefone}', ${cliente.x}, ${cliente.y})`
   )
   .join(",");
 
