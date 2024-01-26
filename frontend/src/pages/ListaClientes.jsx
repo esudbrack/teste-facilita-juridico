@@ -3,8 +3,12 @@ import { useEffect, useState } from "react";
 
 import {
   Backdrop,
+  Box,
+  Button,
   CircularProgress,
   Container,
+  IconButton,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -15,18 +19,40 @@ import {
   Typography,
 } from "@mui/material";
 import { blue } from "@mui/material/colors";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import api from "../services/api";
+import ClienteForm from "../components/ClienteForm";
+
+const modalBoxStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  borderRadius: "15px",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function ListaClientes() {
+  let [cliente, setCliente] = useState(null);
   let [clientes, setClientes] = useState([]);
   let [loading, setLoading] = useState(true);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = (cliente) => {
+    setCliente(cliente);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   function fetchClientes() {
     api
       .get("/clientes")
       .then((response) => {
-        console.log(response.data);
         setClientes(response.data);
         setLoading(false);
       })
@@ -50,6 +76,41 @@ export default function ListaClientes() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      <Button
+        type="button"
+        onClick={() => {
+          handleOpen(null);
+        }}
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+      >
+        Adicionar Cliente
+      </Button>
+
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalBoxStyle}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            color={blue[700]}
+          >
+            Cadastro de cliente
+          </Typography>
+          <ClienteForm
+            handleClose={handleClose}
+            cliente={cliente}
+            clientes={clientes}
+            setClientes={setClientes}
+          />
+        </Box>
+      </Modal>
+
       {!clientes.length ? (
         <Typography variant="h4" gutterBottom color={blue[700]}>
           Nenhum cliente encontrado.
@@ -68,6 +129,7 @@ export default function ListaClientes() {
                   <TableCell align="right">Telefone</TableCell>
                   <TableCell align="right">X</TableCell>
                   <TableCell align="right">Y</TableCell>
+                  <TableCell align="right"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -83,6 +145,15 @@ export default function ListaClientes() {
                     <TableCell align="right">{cliente.telefone}</TableCell>
                     <TableCell align="right">{cliente.x}</TableCell>
                     <TableCell align="right">{cliente.y}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => {
+                          handleOpen(cliente);
+                        }}
+                      >
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
