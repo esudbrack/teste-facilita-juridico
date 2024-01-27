@@ -45,7 +45,7 @@ const createCliente = (request, response) => {
 };
 
 const getDeliveryRoute = async (request, response) => {
-  const query = `SELECT clientes.id, clientes.nome, tsp.cost AS distancia, tsp.agg_cost as distancia_total FROM (SELECT * FROM pgr_TSPeuclidean($$ 
+  const query = `SELECT clientes.id, clientes.nome, clientes.x, clientes.y, tsp.cost AS distancia, tsp.agg_cost as distancia_total FROM (SELECT * FROM pgr_TSPeuclidean($$ 
       SELECT 0 AS id, 0.0 AS x, 0.0 AS y
       UNION
       SELECT id, x, y FROM clientes 
@@ -54,7 +54,7 @@ const getDeliveryRoute = async (request, response) => {
 
   let result = await pool.query(query);
 
-  response.status(200).json(result.rows);
+  response.status(200).json({ clientesRota: result.rows });
 };
 
 module.exports = {

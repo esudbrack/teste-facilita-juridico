@@ -23,6 +23,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import api from "../services/api";
 import ClienteForm from "../components/ClienteForm";
+import RotaClientes from "../components/RotaClientes";
 
 const modalBoxStyle = {
   position: "absolute",
@@ -30,6 +31,8 @@ const modalBoxStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
+  maxHeight: '80%', 
+  overflow: 'auto',
   bgcolor: "background.paper",
   border: "1px solid #000",
   borderRadius: "15px",
@@ -40,14 +43,38 @@ const modalBoxStyle = {
 export default function ListaClientes() {
   let [cliente, setCliente] = useState(null);
   let [clientes, setClientes] = useState([]);
+  let [clientesRota, setClientesRota] = useState([]);
   let [loading, setLoading] = useState(true);
 
   const [open, setOpen] = useState(false);
+  const [openRota, setOpenRota] = useState(false);
+
   const handleOpen = (cliente) => {
     setCliente(cliente);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
+
+  const handleCloseRota = () => setOpenRota(false);
+
+  function getRotaClientes() {
+    setLoading(true);
+
+    api
+      .get("/clientes/rota")
+      .then((res) => {
+        console.log(res.data);
+        setClientesRota(res.data.clientesRota);
+        setLoading(false);
+        setOpenRota(true)
+      })
+      .catch((error) => {
+        setAlertMessage(error.response.data.message);
+        setError(true);
+        setDisplayAlert(true);
+        setLoading(false);
+      });
+  }
 
   function fetchClientes() {
     api
@@ -88,11 +115,7 @@ export default function ListaClientes() {
         Adicionar Cliente
       </Button>
 
-      <Modal
-        open={open}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <Modal open={open} aria-labelledby="modal-modal-title">
         <Box sx={modalBoxStyle}>
           <Typography
             id="modal-modal-title"
@@ -111,6 +134,23 @@ export default function ListaClientes() {
         </Box>
       </Modal>
 
+      <Modal open={openRota} aria-labelledby="modal-modal-rota-title">
+        <Box sx={modalBoxStyle}>
+          <Typography
+            id="modal-modal-rota-title"
+            variant="h6"
+            component="h2"
+            color={blue[700]}
+          >
+            Ordem de entrega
+          </Typography>
+          <RotaClientes
+            handleClose={handleCloseRota}
+            clientesRota={clientesRota}
+          />
+        </Box>
+      </Modal>
+
       {!clientes.length ? (
         <Typography variant="h4" gutterBottom color={blue[700]}>
           Nenhum cliente encontrado.
@@ -120,6 +160,14 @@ export default function ListaClientes() {
           <Typography variant="h4" gutterBottom color={blue[700]}>
             Lista de clientes
           </Typography>
+          <Button
+            type="button"
+            onClick={getRotaClientes}
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Calcular Rota
+          </Button>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: "50vw" }} aria-label="simple table">
               <TableHead>
